@@ -29,43 +29,43 @@ def structure_team_results(tool_results: dict, intent: str) -> str:
 
         if tool_name == "get_team_financial_summary" and isinstance(data, dict):
             s = "## Team Financial Summary\n"
-            s += f"- Total Income: ${data.get('total_income', 0):,.2f}\n"
-            s += f"- Total Expense: ${data.get('total_expense', 0):,.2f}\n"
-            s += f"- Net Profit: ${data.get('net_profit', 0):,.2f}\n"
+            s += f"- Total Income: ₹{data.get('total_income', 0):,.2f}\n"
+            s += f"- Total Expense: ₹{data.get('total_expense', 0):,.2f}\n"
+            s += f"- Net Profit: ₹{data.get('net_profit', 0):,.2f}\n"
             s += f"- Transaction Count: {data.get('transaction_count', 0)}\n"
-            s += f"- Average Transaction: ${data.get('avg_transaction', 0):,.2f}\n"
+            s += f"- Average Transaction: ₹{data.get('avg_transaction', 0):,.2f}\n"
             sections.append(s)
 
         elif tool_name == "get_team_category_breakdown" and isinstance(data, list):
             s = "## Category Breakdown\n"
             for i, cat in enumerate(data[:15], 1):
-                s += f"{i}. **{cat['category']}**: ${cat['total']:,.2f} ({cat['percentage']}%) — {cat['count']} txns\n"
+                s += f"{i}. **{cat['category']}**: ₹{cat['total']:,.2f} ({cat['percentage']}%) — {cat['count']} txns\n"
             sections.append(s)
 
         elif tool_name == "get_team_member_spending" and isinstance(data, list):
             s = "## Member Spending Breakdown\n"
             for i, m in enumerate(data[:20], 1):
                 s += f"{i}. **{m['user']}** (@{m['username']}) [{m['department']}]: "
-                s += f"Income ${m['income']:,.2f} | Expense ${m['expense']:,.2f} | Net ${m['net']:,.2f} ({m['transaction_count']} txns)\n"
+                s += f"Income ₹{m['income']:,.2f} | Expense ₹{m['expense']:,.2f} | Net ₹{m['net']:,.2f} ({m['transaction_count']} txns)\n"
             sections.append(s)
 
         elif tool_name == "get_department_breakdown" and isinstance(data, list):
             s = "## Department Breakdown\n"
             for i, d in enumerate(data[:10], 1):
                 s += f"{i}. **{d['department']}** ({d['member_count']} members): "
-                s += f"Income ${d['income']:,.2f} | Expense ${d['expense']:,.2f} | Net ${d['net']:,.2f} ({d['transaction_count']} txns)\n"
+                s += f"Income ₹{d['income']:,.2f} | Expense ₹{d['expense']:,.2f} | Net ₹{d['net']:,.2f} ({d['transaction_count']} txns)\n"
             sections.append(s)
 
         elif tool_name == "get_team_recent_transactions" and isinstance(data, list):
             s = "## Recent Team Transactions\n"
             for t in data:
-                s += f"- ${t['amount']:,.2f} ({t['type']}) — {t['category']} — {t['timestamp'][:10]} by {t['added_by']}\n"
+                s += f"- ₹{t['amount']:,.2f} ({t['type']}) — {t['category']} — {t['timestamp'][:10]} by {t['added_by']}\n"
             sections.append(s)
 
         elif tool_name == "get_team_top_expenses" and isinstance(data, list):
             s = "## Top Team Expenses\n"
             for i, t in enumerate(data, 1):
-                s += f"{i}. ${t['amount']:,.2f} — {t['category']} — {t['timestamp'][:10]} by {t['added_by']}\n"
+                s += f"{i}. ₹{t['amount']:,.2f} — {t['category']} — {t['timestamp'][:10]} by {t['added_by']}\n"
             sections.append(s)
 
         elif tool_name == "detect_team_anomalies" and isinstance(data, list):
@@ -74,7 +74,7 @@ def structure_team_results(tool_results: dict, intent: str) -> str:
                 s += "No anomalies detected.\n"
             else:
                 for a in data[:10]:
-                    s += f"- ⚠️ ${a['amount']:,.2f} ({a['type']}) in {a['category']} on {a['timestamp'][:10]} by {a['added_by']} — z-score: {a['z_score']}\n"
+                    s += f"- ⚠️ ₹{a['amount']:,.2f} ({a['type']}) in {a['category']} on {a['timestamp'][:10]} by {a['added_by']} — z-score: {a['z_score']}\n"
             sections.append(s)
 
         elif tool_name == "get_team_info" and isinstance(data, dict):
@@ -97,7 +97,7 @@ Your job is to ANALYZE this data and give clear, actionable answers.
 
 Rules:
 - The data provided IS the truth. Analyze it, don't question it.
-- Use the actual numbers from the data. Format currency as $X,XXX.XX.
+- Use the actual numbers from the data. Format currency as ₹X,XXX.XX (Indian Rupees).
 - Be concise. Use bullet points and bold for key figures.
 - When discussing individual members, reference them by name or @username.
 - When discussing departments, compare their spending patterns.
