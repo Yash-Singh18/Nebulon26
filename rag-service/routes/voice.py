@@ -31,6 +31,7 @@ async def voice_chat(
                 "confidence_level": "none",
                 "source": "none",
                 "category": "none",
+                "resources": [],
             }
 
         # Run through RAG pipeline
@@ -47,6 +48,7 @@ async def voice_chat(
             "confidence_level": result["confidence_level"],
             "source": result["source"],
             "category": result.get("category", "general"),
+            "resources": result.get("resources", []),
         }
     except Exception as e:
         print(f"Voice error: {e}")

@@ -2,17 +2,46 @@
 
 import sys
 import os
+import subprocess
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from pypdf import PdfReader
 
 KNOWLEDGE_DIR = Path(__file__).parent.parent / "data" / "knowledge_base"
 
 
+def extract_pdf_text(pdf_file: Path) -> str:
+    """Extract PDF text with a pypdf-first strategy and pdftotext fallback."""
+    try:
+        reader = PdfReader(str(pdf_file))
+        pages = []
+        for page_number, page in enumerate(reader.pages, start=1):
+            text = (page.extract_text() or "").strip()
+            if text:
+                pages.append(f"[Page {page_number}]\n{text}")
+
+        return "\n\n".join(pages).strip()
+    except Exception as exc:
+        print(f"Falling back to pdftotext for {pdf_file.name}: {exc}")
+        result = subprocess.run(
+            ["pdftotext", str(pdf_file), "-"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        pages = [
+            f"[Page {page_number}]\n{page.strip()}"
+            for page_number, page in enumerate(result.stdout.split("\f"), start=1)
+            if page.strip()
+        ]
+        return "\n\n".join(pages).strip()
+
+
 def load_documents() -> list[dict]:
-    """Load all markdown files from the knowledge base directory."""
+    """Load markdown and PDF files from the knowledge base directory."""
     documents = []
 
     for md_file in sorted(KNOWLEDGE_DIR.glob("*.md")):
@@ -23,6 +52,22 @@ def load_documents() -> list[dict]:
                 "metadata": {
                     "source": md_file.name,
                     "topic": md_file.stem.replace("_", " ").title(),
+                },
+            }
+        )
+
+    for pdf_file in sorted(KNOWLEDGE_DIR.glob("*.pdf")):
+        content = extract_pdf_text(pdf_file)
+        if not content:
+            continue
+
+        documents.append(
+            {
+                "text": content,
+                "metadata": {
+                    "source": pdf_file.name,
+                    "topic": pdf_file.stem.replace("_", " ").title(),
+                    "file_type": "pdf",
                 },
             }
         )
@@ -59,7 +104,12 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
 if __name__ == "__main__":
     import asyncio
     from services.embeddings import init_embeddings
-    from services.vector_store import init_vector_store, upsert_documents, get_collection_count
+    from services.vector_store import (
+        init_vector_store,
+        upsert_documents,
+        get_collection_count,
+        recreate_collection,
+    )
     from services.keyword_search import rebuild_index
 
     async def main():
@@ -68,11 +118,7 @@ if __name__ == "__main__":
 
         print("Connecting to Qdrant...")
         await init_vector_store()
-
-        count = get_collection_count()
-        if count > 0:
-            print(f"Collection already has {count} documents. Delete collection to re-ingest.")
-            return
+        recreate_collection()
 
         print(f"Loading documents from {KNOWLEDGE_DIR}...")
         documents = load_documents()
@@ -92,5 +138,6 @@ if __name__ == "__main__":
         rebuild_index([{"text": c["text"], "metadata": c["metadata"]} for c in chunks])
 
         print(f"Done! Total chunks indexed: {len(chunks)}")
+        print(f"Collection now contains {get_collection_count()} vectors")
 
     asyncio.run(main())

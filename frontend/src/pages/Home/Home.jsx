@@ -9,6 +9,7 @@ import {
 import { getProfile } from "../../services/supabase/profiles";
 import Navbar from "../../components/Navbar/Navbar";
 import OnboardingModal from "../../components/OnboardingModal/OnboardingModal";
+import FloatingChatbot from "../../components/FloatingChatbot/FloatingChatbot";
 import "./Home.css";
 
 const OFFERINGS = [
@@ -310,6 +311,8 @@ function Home() {
           </div>
         </div>
       </footer>
+
+      <FloatingChatbot />
     </div>
   );
 }

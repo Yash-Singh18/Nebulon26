@@ -5,6 +5,12 @@ from services.pipeline import run_pipeline
 router = APIRouter()
 
 
+class ResourceItem(BaseModel):
+    source: str
+    topic: str
+    excerpt: str
+
+
 class ChatRequest(BaseModel):
     query: str
     session_id: str
@@ -17,6 +23,7 @@ class ChatResponse(BaseModel):
     confidence_level: str
     source: str
     category: str
+    resources: list[ResourceItem]
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -33,6 +40,7 @@ async def chat(request: ChatRequest):
             confidence_level=result["confidence_level"],
             source=result["source"],
             category=result.get("category", "general"),
+            resources=result.get("resources", []),
         )
     except Exception as e:
         print(f"Chat error: {e}")

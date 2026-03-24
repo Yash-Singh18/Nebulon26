@@ -37,7 +37,36 @@ LANGUAGE_NAMES = {
     "en": "English", "hi": "Hindi", "es": "Spanish", "fr": "French",
     "de": "German", "zh": "Chinese", "ja": "Japanese", "ar": "Arabic",
     "pt": "Portuguese", "ko": "Korean", "ru": "Russian", "it": "Italian",
+    "mr": "Marathi",
 }
+
+
+def build_resources(chunks: list[dict]) -> list[dict]:
+    resources = []
+    seen = set()
+
+    for chunk in chunks:
+        metadata = chunk.get("metadata", {})
+        source = metadata.get("source")
+        topic = metadata.get("topic", "Knowledge Base")
+        if not source or source in seen:
+            continue
+
+        text = chunk.get("text", "").strip().replace("\n", " ")
+        excerpt = text[:220].strip()
+        if len(text) > 220:
+            excerpt += "..."
+
+        resources.append(
+            {
+                "source": source,
+                "topic": topic,
+                "excerpt": excerpt,
+            }
+        )
+        seen.add(source)
+
+    return resources
 
 
 async def run_pipeline(query: str, session_id: str, language: str = "en") -> dict:
@@ -150,4 +179,5 @@ async def run_pipeline(query: str, session_id: str, language: str = "en") -> dic
         "source": source,
         "category": category,
         "chunks_used": len(retrieval["chunks"]),
+        "resources": build_resources(retrieval["chunks"]),
     }
