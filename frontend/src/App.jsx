@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import TrackExpense from "./pages/TrackExpense/TrackExpense";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* Other routes will be added as pages are built */}
+        <Route path="/track-expense" element={<TrackExpense />} />
       </Routes>
     </BrowserRouter>
   );
