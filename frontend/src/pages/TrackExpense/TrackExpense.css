@@ -191,12 +191,12 @@
 .te__layout {
   display: flex;
   min-height: 100vh;
-  padding-top: 80px;
+  align-items: stretch;
 }
 
 .te__content {
   flex: 1;
-  padding: var(--spacing-xl);
+  padding: 104px var(--spacing-xl) var(--spacing-xl);
   overflow-y: auto;
   min-width: 0;
 }
@@ -318,5 +318,9 @@
   .te__layout {
     flex-direction: column;
     padding-top: 70px;
+  }
+
+  .te__content {
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
   }
 }

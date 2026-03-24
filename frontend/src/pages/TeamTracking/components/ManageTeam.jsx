@@ -1,11 +1,45 @@
-import { useState } from "react";
-import { kickMember, requestAdmin, updateMemberDepartment } from "../../../services/supabase/teams";
+import { useEffect, useState } from "react";
+import { getMyAdminRequest, kickMember, requestAdmin, updateMemberDepartment } from "../../../services/supabase/teams";
 import "./ManageTeam.css";
 
 function ManageTeam({ roomId, room, isAdmin, userId, members, onMembersChange }) {
-  const [requestSent, setRequestSent] = useState(false);
+  const [requestStatus, setRequestStatus] = useState(null);
+  const [requestLoading, setRequestLoading] = useState(false);
+  const [requestError, setRequestError] = useState("");
   const [editingDept, setEditingDept] = useState(null);
   const [deptValue, setDeptValue] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadRequest() {
+      if (isAdmin) {
+        setRequestStatus(null);
+        setRequestError("");
+        setRequestLoading(false);
+        return;
+      }
+
+      setRequestLoading(true);
+      setRequestError("");
+
+      const { request, error } = await getMyAdminRequest(roomId);
+      if (ignore) return;
+
+      if (error) {
+        setRequestError("Could not load admin request status.");
+      }
+
+      setRequestStatus(request?.status || null);
+      setRequestLoading(false);
+    }
+
+    loadRequest();
+
+    return () => {
+      ignore = true;
+    };
+  }, [isAdmin, roomId]);
 
   async function handleKick(memberId, memberUserId) {
     if (memberUserId === room.admin_id) return;
@@ -14,8 +48,18 @@ function ManageTeam({ roomId, room, isAdmin, userId, members, onMembersChange })
   }
 
   async function handleRequestAdmin() {
-    const { error } = await requestAdmin(roomId);
-    if (!error) setRequestSent(true);
+    setRequestLoading(true);
+    setRequestError("");
+
+    const { request, error } = await requestAdmin(roomId);
+
+    if (error) {
+      setRequestError(error.message || "Could not send admin request.");
+    } else {
+      setRequestStatus(request?.status || "pending");
+    }
+
+    setRequestLoading(false);
   }
 
   async function handleSaveDept(memberUserId) {
@@ -44,13 +88,27 @@ function ManageTeam({ roomId, room, isAdmin, userId, members, onMembersChange })
             <span className="mteam__room-code-label">Room Code</span>
             <span className="mteam__room-code-value">{room.room_code}</span>
           </div>
-          {!isAdmin && !requestSent && (
-            <button className="mteam__request-btn" onClick={handleRequestAdmin}>
-              Request Admin
+          {!isAdmin && requestStatus !== "pending" && requestStatus !== "approved" && (
+            <button
+              type="button"
+              className="mteam__request-btn"
+              onClick={handleRequestAdmin}
+              disabled={requestLoading}
+            >
+              {requestLoading ? "Sending..." : "Request Admin"}
             </button>
           )}
-          {requestSent && (
+          {!isAdmin && requestStatus === "pending" && (
             <span className="mteam__request-sent">Admin request sent!</span>
+          )}
+          {!isAdmin && requestStatus === "approved" && (
+            <span className="mteam__request-sent">Admin request approved.</span>
+          )}
+          {!isAdmin && requestStatus === "rejected" && !requestError && (
+            <span className="mteam__request-error">Your admin request was already reviewed.</span>
+          )}
+          {requestError && (
+            <span className="mteam__request-error">{requestError}</span>
           )}
         </div>
       </div>

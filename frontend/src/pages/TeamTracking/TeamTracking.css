@@ -235,12 +235,12 @@
 .tt__layout {
   display: flex;
   min-height: 100vh;
-  padding-top: 80px;
+  align-items: stretch;
 }
 
 .tt__content {
   flex: 1;
-  padding: var(--spacing-xl);
+  padding: 104px var(--spacing-xl) var(--spacing-xl);
   overflow-y: auto;
   min-width: 0;
 }
@@ -378,5 +378,9 @@
   .tt__layout {
     flex-direction: column;
     padding-top: 70px;
+  }
+
+  .tt__content {
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
   }
 }

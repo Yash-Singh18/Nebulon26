@@ -174,6 +174,15 @@ export async function updateMemberDepartment(roomId, userId, department) {
 export async function requestAdmin(roomId) {
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    const { data: existing, error: existingError } = await supabase
+      .from("admin_requests")
+      .select("id, room_id, user_id, status, created_at")
+      .eq("room_id", roomId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (existingError) throw existingError;
+    if (existing) return { request: existing, error: null };
+
     const { data, error } = await supabase
       .from("admin_requests")
       .insert([{ room_id: roomId, user_id: user.id }])
@@ -183,6 +192,23 @@ export async function requestAdmin(roomId) {
     return { request: data, error: null };
   } catch (error) {
     console.error("Request admin error:", error.message);
+    return { request: null, error };
+  }
+}
+
+export async function getMyAdminRequest(roomId) {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data, error } = await supabase
+      .from("admin_requests")
+      .select("id, room_id, user_id, status, created_at")
+      .eq("room_id", roomId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (error) throw error;
+    return { request: data, error: null };
+  } catch (error) {
+    console.error("Get my admin request error:", error.message);
     return { request: null, error };
   }
 }
