@@ -1,0 +1,59 @@
+.tdash__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.tdash__summary--secondary {
+  grid-template-columns: 1fr;
+  max-width: 320px;
+}
+
+.tdash__stat {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  border-left: 4px solid var(--color-border);
+}
+
+.tdash__stat--income { border-left-color: #22C55E; }
+.tdash__stat--expense { border-left-color: var(--color-danger); }
+.tdash__stat--profit { border-left-color: var(--color-primary); }
+.tdash__stat--loss { border-left-color: #F59E0B; }
+
+.tdash__stat--runway-safe { border-left-color: #22C55E; }
+.tdash__stat--runway-warning { border-left-color: #F59E0B; }
+.tdash__stat--runway-danger { border-left-color: var(--color-danger); }
+.tdash__stat--runway-deficit { border-left-color: var(--color-danger); }
+.tdash__stat--runway-neutral { border-left-color: var(--color-border); }
+
+.tdash__stat-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tdash__stat-value {
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tdash__stat-sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.tdash__loading {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-text-secondary);
+}

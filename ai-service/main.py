@@ -4,6 +4,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.chat import router as chat_router
+from routes.team_chat import router as team_chat_router
 
 app = FastAPI(title="Sirius AI Service", version="1.0.0")
 
@@ -16,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(chat_router)
+app.include_router(team_chat_router)
 
 
 @app.get("/health")

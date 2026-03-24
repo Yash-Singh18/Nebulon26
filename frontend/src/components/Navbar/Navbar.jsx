@@ -4,7 +4,7 @@ import "./Navbar.css";
 
 const NAV_LINKS = [
   { label: "Track Expense", to: "/track-expense" },
-  { label: "Team Tracking", href: "https://github.com/Yash-Singh18" },
+  { label: "Team Tracking", to: "/team-tracking" },
   { label: "Services", href: "https://github.com/Yash-Singh18" },
   { label: "SplitWise", href: "https://github.com/Yash-Singh18" },
 ];
