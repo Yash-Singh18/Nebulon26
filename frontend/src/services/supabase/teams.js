@@ -110,11 +110,27 @@ export async function getMembers(roomId) {
   try {
     const { data, error } = await supabase
       .from("team_members")
-      .select("*, profiles:user_id(id, name, username)")
+      .select("*")
       .eq("room_id", roomId)
       .order("joined_at", { ascending: true });
     if (error) throw error;
-    return { members: data, error: null };
+
+    // Fetch profiles separately (no direct FK from team_members to profiles)
+    const userIds = data.map((m) => m.user_id);
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, name, username")
+      .in("id", userIds);
+
+    const profileMap = {};
+    for (const p of profiles || []) profileMap[p.id] = p;
+
+    const members = data.map((m) => ({
+      ...m,
+      profiles: profileMap[m.user_id] || null,
+    }));
+
+    return { members, error: null };
   } catch (error) {
     console.error("Get members error:", error.message);
     return { members: [], error };
@@ -175,12 +191,27 @@ export async function getAdminRequests(roomId) {
   try {
     const { data, error } = await supabase
       .from("admin_requests")
-      .select("*, profiles:user_id(id, name, username)")
+      .select("*")
       .eq("room_id", roomId)
       .eq("status", "pending")
       .order("created_at", { ascending: true });
     if (error) throw error;
-    return { requests: data, error: null };
+
+    const userIds = data.map((r) => r.user_id);
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, name, username")
+      .in("id", userIds);
+
+    const profileMap = {};
+    for (const p of profiles || []) profileMap[p.id] = p;
+
+    const requests = data.map((r) => ({
+      ...r,
+      profiles: profileMap[r.user_id] || null,
+    }));
+
+    return { requests, error: null };
   } catch (error) {
     console.error("Get admin requests error:", error.message);
     return { requests: [], error };

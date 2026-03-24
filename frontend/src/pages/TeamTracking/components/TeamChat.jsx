@@ -143,12 +143,12 @@ function TeamChat({ roomId, userId, members, profile }) {
           return (
             <div key={msg.id} className={`tchat__msg${isMe ? " tchat__msg--me" : ""}`}>
               <div className="tchat__msg-avatar">
-                {(msg.profiles?.name || memberInfo?.profiles?.name || "?").charAt(0).toUpperCase()}
+                {(memberInfo?.profiles?.name || memberInfo?.profiles?.username || "?").charAt(0).toUpperCase()}
               </div>
               <div className="tchat__msg-body">
                 <div className="tchat__msg-header">
                   <span className="tchat__msg-name">
-                    {(msg.profiles?.username || memberInfo?.profiles?.username) ? `@${msg.profiles?.username || memberInfo?.profiles?.username}` : (msg.profiles?.name || memberInfo?.profiles?.name || "Unknown")}
+                    {memberInfo?.profiles?.username ? `@${memberInfo.profiles.username}` : (memberInfo?.profiles?.name || "Unknown")}
                   </span>
                   {isAdminUser && <span className="tchat__msg-admin">Admin</span>}
                   {dept && <span className="tchat__msg-dept">{dept}</span>}

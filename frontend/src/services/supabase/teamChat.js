@@ -4,7 +4,7 @@ export async function getMessages(roomId, limit = 100) {
   try {
     const { data, error } = await supabase
       .from("team_messages")
-      .select("*, profiles:user_id(id, name, username)")
+      .select("*")
       .eq("room_id", roomId)
       .order("created_at", { ascending: true })
       .limit(limit);
@@ -43,14 +43,9 @@ export function subscribeToMessages(roomId, callback) {
         table: "team_messages",
         filter: `room_id=eq.${roomId}`,
       },
-      async (payload) => {
-        // Fetch the full message with profile data
-        const { data } = await supabase
-          .from("team_messages")
-          .select("*, profiles:user_id(id, name, username)")
-          .eq("id", payload.new.id)
-          .single();
-        if (data) callback(data);
+      (payload) => {
+        // Use payload directly - profiles resolved via memberMap in component
+        callback(payload.new);
       }
     )
     .subscribe();
