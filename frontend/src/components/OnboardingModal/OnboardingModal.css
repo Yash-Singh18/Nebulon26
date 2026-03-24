@@ -1,0 +1,201 @@
+.onboarding__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-md);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.onboarding__modal {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px inset rgba(255,255,255,0.05);
+  position: relative;
+  overflow: hidden;
+  animation: popIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.onboarding__modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.onboarding__header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.onboarding__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: var(--radius-full);
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.onboarding__title {
+  margin: 0 0 var(--spacing-xs);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.onboarding__subtitle {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.onboarding__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.onboarding__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.onboarding__label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.onboarding__required {
+  color: var(--color-danger);
+}
+
+.onboarding__optional {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  font-size: 0.8em;
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.onboarding__input {
+  padding: 14px var(--spacing-md);
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  transition: var(--transition-normal);
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media(prefers-color-scheme: light) {
+  .onboarding__input {
+    background: #FFFFFF;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  }
+}
+
+.onboarding__input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.onboarding__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  background: var(--color-card);
+}
+
+.onboarding__error {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+  text-align: center;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.onboarding__submit {
+  margin-top: var(--spacing-md);
+  padding: 16px var(--spacing-lg);
+  background: var(--gradient-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding__submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-hover);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.onboarding__submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
+}
+
+.onboarding__submit:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.onboarding__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.onboarding__submit > * {
+  position: relative;
+  z-index: 1;
+}
