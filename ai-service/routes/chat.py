@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 from services.groq_client import chat
 
 router = APIRouter()
@@ -14,6 +15,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
     tools_used: list = []
+    intent: Optional[str] = None
 
 
 @router.post("/api/chat", response_model=ChatResponse)

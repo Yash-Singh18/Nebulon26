@@ -1,24 +1,49 @@
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import { sendMessage } from "../../../services/api/aibot";
 import "./AiBot.css";
 
 const PREBUILT = [
   { label: "Summarize my business", message: "Summarize my business performance" },
-  { label: "Show biggest expenses", message: "What are my biggest expense categories?" },
-  { label: "Show risks", message: "Are there any financial risks or anomalies I should be aware of?" },
+  { label: "Show biggest expenses", message: "Where are my biggest expenses?" },
+  { label: "Show risks", message: "Are there any financial risks or anomalies I should worry about?" },
   { label: "Give suggestions", message: "Give me actionable suggestions to improve my finances" },
   { label: "Predict future trend", message: "Based on my data, predict the future financial trend" },
+  { label: "Recent activity", message: "Show me my recent transactions" },
 ];
+
+function speakText(text) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  // Strip markdown formatting for cleaner speech
+  const clean = text
+    .replace(/\*\*/g, "")
+    .replace(/[#*_`→⚠️]/g, "")
+    .replace(/\n+/g, ". ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 1.05;
+  utterance.pitch = 1;
+  window.speechSynthesis.speak(utterance);
+}
 
 function AiBot({ businessId, businessName }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [speakingIdx, setSpeakingIdx] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Stop speech on unmount
+  useEffect(() => {
+    return () => window.speechSynthesis?.cancel();
+  }, []);
 
   async function send(text) {
     if (!text.trim() || loading) return;
@@ -42,8 +67,29 @@ function AiBot({ businessId, businessName }) {
         ...prev,
         { role: "assistant", content: response, tools_used },
       ]);
+      // Auto-speak if voice is enabled
+      if (voiceEnabled && response) {
+        speakText(response);
+      }
     }
     setLoading(false);
+  }
+
+  function handleSpeak(text, idx) {
+    if (speakingIdx === idx) {
+      window.speechSynthesis.cancel();
+      setSpeakingIdx(null);
+    } else {
+      speakText(text);
+      setSpeakingIdx(idx);
+      // Reset when speech ends
+      const checkDone = setInterval(() => {
+        if (!window.speechSynthesis.speaking) {
+          setSpeakingIdx(null);
+          clearInterval(checkDone);
+        }
+      }, 200);
+    }
   }
 
   function handleSubmit(e) {
@@ -55,10 +101,20 @@ function AiBot({ businessId, businessName }) {
     <div className="aibot">
       <div className="aibot__header">
         <div className="aibot__header-icon">🤖</div>
-        <div>
+        <div className="aibot__header-text">
           <h3 className="aibot__header-title">AI Financial Analyst</h3>
           <p className="aibot__header-sub">Analyzing {businessName || "your business"}</p>
         </div>
+        <button
+          className={`aibot__voice-toggle${voiceEnabled ? " aibot__voice-toggle--on" : ""}`}
+          onClick={() => {
+            setVoiceEnabled((v) => !v);
+            if (voiceEnabled) window.speechSynthesis?.cancel();
+          }}
+          title={voiceEnabled ? "Disable voice" : "Enable voice"}
+        >
+          {voiceEnabled ? "🔊" : "🔇"}
+        </button>
       </div>
 
       {/* Prebuilt actions */}
@@ -88,12 +144,29 @@ function AiBot({ businessId, businessName }) {
               {msg.role === "user" ? "👤" : "🤖"}
             </div>
             <div className="aibot__msg-body">
-              <div className="aibot__msg-content">{msg.content}</div>
-              {msg.tools_used?.length > 0 && (
-                <div className="aibot__msg-tools">
-                  Tools used: {msg.tools_used.join(", ")}
-                </div>
-              )}
+              <div className="aibot__msg-content">
+                {msg.role === "assistant" ? (
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
+              </div>
+              <div className="aibot__msg-meta">
+                {msg.role === "assistant" && (
+                  <button
+                    className={`aibot__speak-btn${speakingIdx === i ? " aibot__speak-btn--active" : ""}`}
+                    onClick={() => handleSpeak(msg.content, i)}
+                    title={speakingIdx === i ? "Stop" : "Read aloud"}
+                  >
+                    {speakingIdx === i ? "⏹" : "🔈"}
+                  </button>
+                )}
+                {msg.tools_used?.length > 0 && (
+                  <span className="aibot__msg-tools">
+                    {msg.tools_used.join(" → ")}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -128,7 +201,7 @@ function AiBot({ businessId, businessName }) {
       {/* Prebuilt below chat */}
       {messages.length > 0 && (
         <div className="aibot__quick-row">
-          {PREBUILT.slice(0, 3).map((p) => (
+          {PREBUILT.slice(0, 4).map((p) => (
             <button
               key={p.label}
               className="aibot__quick-btn"
