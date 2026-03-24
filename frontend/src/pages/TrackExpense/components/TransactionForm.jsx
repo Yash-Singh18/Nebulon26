@@ -3,12 +3,18 @@ import Papa from "papaparse";
 import { addTransaction, addTransactionsBatch } from "../../../services/supabase/transactions";
 import "./TransactionForm.css";
 
+function localNow() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+}
+
 function TransactionForm({ businessId, onAdded }) {
   const [form, setForm] = useState({
     amount: "",
     type: "expense",
     category: "",
-    timestamp: new Date().toISOString().slice(0, 16),
+    timestamp: localNow(),
   });
   const [saving, setSaving] = useState(false);
   const [csvStatus, setCsvStatus] = useState(null);
@@ -37,7 +43,7 @@ function TransactionForm({ businessId, onAdded }) {
         amount: "",
         type: "expense",
         category: "",
-        timestamp: new Date().toISOString().slice(0, 16),
+        timestamp: localNow(),
       });
       onAdded();
     }

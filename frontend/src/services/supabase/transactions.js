@@ -49,6 +49,22 @@ export async function addTransactionsBatch(transactions) {
   }
 }
 
+export async function updateTransaction(id, updates) {
+  try {
+    const { data, error } = await supabase
+      .from("transactions")
+      .update(updates)
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return { transaction: data, error: null };
+  } catch (error) {
+    console.error("Update transaction error:", error.message);
+    return { transaction: null, error };
+  }
+}
+
 export async function deleteTransaction(id) {
   try {
     const { error } = await supabase

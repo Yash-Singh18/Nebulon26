@@ -65,13 +65,13 @@ function bucketData(transactions, start, end) {
     const d = parseISO(tx.timestamp);
     if (!isWithinInterval(d, { start, end })) continue;
     const key = format(d, bucketFormat);
-    if (!buckets[key]) buckets[key] = { label: format(d, labelFormat), income: 0, expense: 0 };
+    if (!buckets[key]) buckets[key] = { key, label: format(d, labelFormat), income: 0, expense: 0 };
     buckets[key][tx.type] += Number(tx.amount);
   }
 
   return Object.values(buckets)
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .map((b) => ({ ...b, net: b.income - b.expense }));
+    .sort((a, b) => a.key.localeCompare(b.key))
+    .map(({ key: _k, ...b }) => ({ ...b, net: b.income - b.expense }));
 }
 
 function detectAnomalies(transactions) {
@@ -195,7 +195,7 @@ function GraphPanel({ transactions }) {
                   <Cell key={i} fill={COLORS.categories[i % COLORS.categories.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(v) => `$${v.toLocaleString()}`} />
+              <Tooltip formatter={(v) => `₹${v.toLocaleString()}`} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
@@ -430,7 +430,7 @@ function GraphPanel({ transactions }) {
             {filtered.filter((t) => anomalyIds.has(t.id)).map((t) => (
               <div key={t.id} className="graph__anomaly-item">
                 <span className="graph__anomaly-badge">{t.type}</span>
-                <span>${Number(t.amount).toLocaleString()}</span>
+                <span>₹{Number(t.amount).toLocaleString()}</span>
                 <span className="graph__anomaly-cat">{t.category || "N/A"}</span>
                 <span className="graph__anomaly-date">{format(parseISO(t.timestamp), "MMM dd, yyyy")}</span>
               </div>

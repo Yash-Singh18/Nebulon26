@@ -3,6 +3,7 @@ import "./LeftNav.css";
 const TABS = [
   { key: "about", label: "About", icon: "ℹ️" },
   { key: "dashboard", label: "Dashboard", icon: "📊" },
+  { key: "manage", label: "Manage Transactions", icon: "📋" },
   { key: "ai-bot", label: "AI Bot", icon: "🤖" },
 ];
 

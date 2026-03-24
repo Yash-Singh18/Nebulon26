@@ -4,9 +4,9 @@ import "./Navbar.css";
 
 const NAV_LINKS = [
   { label: "Track Expense", to: "/track-expense" },
-  { label: "Team Tracking", to: "/team-tracking" },
-  { label: "Services", to: "/services" },
-  { label: "SplitWise", to: "/splitwise" },
+  { label: "Team Tracking", href: "https://github.com/Yash-Singh18" },
+  { label: "Services", href: "https://github.com/Yash-Singh18" },
+  { label: "SplitWise", href: "https://github.com/Yash-Singh18" },
 ];
 
 function Navbar({ session, profile, onLogin, onLogout }) {
@@ -26,14 +26,26 @@ function Navbar({ session, profile, onLogin, onLogout }) {
 
         <ul className={`navbar__links${menuOpen ? " navbar__links--open" : ""}`}>
           {NAV_LINKS.map((link) => (
-            <li key={link.to}>
-              <Link
-                to={link.to}
-                className="navbar__link"
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
+            <li key={link.label}>
+              {link.href ? (
+                <a
+                  href={link.href}
+                  className="navbar__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  to={link.to}
+                  className="navbar__link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>

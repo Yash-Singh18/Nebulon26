@@ -69,6 +69,58 @@
   letter-spacing: -0.02em;
 }
 
+.dashboard__stat-sub {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.dashboard__stat--runway-safe::before {
+  background: #22C55E;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+.dashboard__stat--runway-safe .dashboard__stat-sub {
+  color: #22C55E;
+}
+
+.dashboard__stat--runway-warning::before {
+  background: #F59E0B;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.dashboard__stat--runway-warning .dashboard__stat-sub {
+  color: #F59E0B;
+}
+
+.dashboard__stat--runway-danger::before {
+  background: #EF4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.dashboard__stat--runway-danger .dashboard__stat-sub {
+  color: #EF4444;
+}
+
+.dashboard__stat--runway-deficit::before {
+  background: #EF4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.dashboard__stat--runway-deficit .dashboard__stat-sub {
+  color: #EF4444;
+}
+
+.dashboard__stat--runway-neutral::before {
+  background: #6B7280;
+  box-shadow: 0 0 10px rgba(107, 114, 128, 0.4);
+}
+
+.dashboard__stat--runway-neutral .dashboard__stat-sub {
+  color: #6B7280;
+}
+
 .dashboard__loading {
   text-align: center;
   padding: var(--spacing-2xl);

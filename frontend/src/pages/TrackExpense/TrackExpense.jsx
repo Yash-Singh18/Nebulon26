@@ -11,6 +11,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import LeftNav from "./components/LeftNav";
 import About from "./components/About";
 import Dashboard from "./components/Dashboard";
+import ManageTransactions from "./components/ManageTransactions";
 import AiBot from "./components/AiBot";
 import "./TrackExpense.css";
 
@@ -110,6 +111,9 @@ function TrackExpense() {
           )}
           {activeTab === "dashboard" && (
             <Dashboard businessId={selectedBiz.id} />
+          )}
+          {activeTab === "manage" && (
+            <ManageTransactions businessId={selectedBiz.id} />
           )}
           {activeTab === "ai-bot" && (
             <AiBot businessId={selectedBiz.id} businessName={selectedBiz.name} />
