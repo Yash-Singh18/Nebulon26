@@ -239,13 +239,11 @@
   text-shadow: 0 4px 24px rgba(0,0,0,0.1);
 }
 
-@media (prefers-color-scheme: light) {
-  .hero__title {
-    background: linear-gradient(to right, #0F172A 30%, #3B82F6 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+:root[data-theme="light"] .hero__title {
+  background: linear-gradient(to right, #0F172A 30%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero__subtitle {
@@ -320,8 +318,8 @@
 }
 
 /* Base Light mode adjustments */
-@media(prefers-color-scheme: light) {
-  .mockup__lights { opacity: 0.2; }
+:root[data-theme="light"] .mockup__lights {
+  opacity: 0.2;
 }
 
 /* Header */
@@ -690,13 +688,11 @@
   -webkit-text-fill-color: transparent;
 }
 
-@media(prefers-color-scheme: light) {
-  .cta__title {
-    background: linear-gradient(135deg, #0F172A 0%, #3B82F6 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+:root[data-theme="light"] .cta__title {
+  background: linear-gradient(135deg, #0F172A 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .cta__subtitle {
@@ -852,10 +848,8 @@
   background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));
 }
 
-@media(prefers-color-scheme: light){
-  .footer__divider {
-    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-  }
+:root[data-theme="light"] .footer__divider {
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
 }
 
 .footer__bottom {

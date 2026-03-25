@@ -257,3 +257,41 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .tchat {
+    height: calc(100vh - 140px);
+    border-radius: var(--radius-lg);
+  }
+
+  .tchat__header,
+  .tchat__messages {
+    padding: var(--spacing-md);
+  }
+
+  .tchat__msg {
+    max-width: 100%;
+  }
+
+  .tchat__msg-header {
+    flex-wrap: wrap;
+  }
+
+  .tchat__msg-time {
+    margin-left: 0;
+  }
+
+  .tchat__mentions {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    bottom: 64px;
+  }
+
+  .tchat__input-bar {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .tchat__send {
+    padding: 10px 16px;
+  }
+}

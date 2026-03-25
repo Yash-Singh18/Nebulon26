@@ -126,11 +126,9 @@
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
 }
 
-@media(prefers-color-scheme: light) {
-  .onboarding__input {
-    background: #FFFFFF;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-  }
+:root[data-theme="light"] .onboarding__input {
+  background: #FFFFFF;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .onboarding__input::placeholder {
@@ -198,4 +196,18 @@
 .onboarding__submit > * {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .onboarding__modal {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .onboarding__title {
+    font-size: 1.5rem;
+  }
+
+  .onboarding__submit {
+    padding: 14px var(--spacing-lg);
+  }
 }

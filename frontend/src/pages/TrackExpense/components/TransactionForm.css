@@ -120,3 +120,24 @@
   color: var(--color-primary);
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .txform__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .txform__field {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .txform__submit {
+    width: 100%;
+    height: 44px;
+  }
+
+  .txform__csv {
+    align-items: flex-start;
+  }
+}

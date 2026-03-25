@@ -57,3 +57,17 @@
   padding: var(--spacing-2xl);
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 768px) {
+  .tdash__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .tdash__summary--secondary {
+    max-width: 100%;
+  }
+
+  .tdash__stat {
+    padding: var(--spacing-md);
+  }
+}

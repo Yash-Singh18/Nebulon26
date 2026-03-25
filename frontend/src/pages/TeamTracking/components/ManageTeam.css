@@ -268,3 +268,38 @@
 .mteam__kick-btn:hover {
   background: rgba(239, 68, 68, 0.2);
 }
+
+@media (max-width: 768px) {
+  .mteam__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mteam__header-actions {
+    justify-content: flex-start;
+  }
+
+  .mteam__member {
+    padding: var(--spacing-md);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .mteam__member-info {
+    width: calc(100% - 56px);
+  }
+
+  .mteam__dept-edit {
+    flex-wrap: wrap;
+  }
+
+  .mteam__dept-input {
+    width: 100%;
+  }
+
+  .mteam__kick-btn {
+    width: 100%;
+    margin-left: 0;
+    padding: 8px 14px;
+  }
+}

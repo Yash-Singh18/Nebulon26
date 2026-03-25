@@ -171,3 +171,33 @@
   padding: var(--spacing-2xl);
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 768px) {
+  .apanel__card {
+    padding: var(--spacing-md);
+  }
+
+  .apanel__card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+
+  .apanel__card-info {
+    flex-wrap: wrap;
+  }
+
+  .apanel__card-details {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .apanel__card-actions {
+    width: 100%;
+  }
+
+  .apanel__btn {
+    flex: 1;
+    padding: 9px 12px;
+  }
+}

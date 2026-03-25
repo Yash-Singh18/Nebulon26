@@ -318,6 +318,38 @@
   overflow-x: auto;
 }
 
+@media (max-width: 768px) {
+  .taibot {
+    height: calc(100vh - 140px);
+    border-radius: var(--radius-lg);
+  }
+
+  .taibot__header {
+    padding: var(--spacing-md);
+  }
+
+  .taibot__prebuilt,
+  .taibot__messages {
+    padding: var(--spacing-md);
+  }
+
+  .taibot__msg {
+    max-width: 100%;
+  }
+
+  .taibot__input-bar {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .taibot__send {
+    padding: 10px 16px;
+  }
+
+  .taibot__quick-row {
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+  }
+}
+
 .taibot__quick-btn {
   padding: 6px 14px;
   border-radius: var(--radius-full);

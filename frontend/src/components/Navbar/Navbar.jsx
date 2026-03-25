@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 const NAV_LINKS = [
   { label: "Track Expense", to: "/track-expense" },
   { label: "Team Tracking", to: "/team-tracking" },
-  { label: "Services", href: "https://github.com/Yash-Singh18" },
-  { label: "SplitWise", href: "https://github.com/Yash-Singh18" },
+  { label: "Services", to: "/services" },
+  { label: "Consultant", to: "/sme-expert" },
 ];
 
 function Navbar({ session, profile, onLogin, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    const stored = window.localStorage.getItem("sirius-theme");
+    if (stored === "light" || stored === "dark") return stored;
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    window.localStorage.setItem("sirius-theme", theme);
+  }, [theme]);
 
   const displayName = profile?.username
     ? `@${profile.username}`
@@ -51,6 +62,14 @@ function Navbar({ session, profile, onLogin, onLogout }) {
         </ul>
 
         <div className="navbar__actions">
+          <button
+            className="navbar__theme-toggle"
+            onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            {theme === "dark" ? "☀" : "🌙"}
+          </button>
           {session ? (
             <>
               <span className="navbar__username">{displayName}</span>

@@ -371,3 +371,35 @@
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
+
+@media (max-width: 768px) {
+  .aibot {
+    height: calc(100vh - 140px);
+    border-radius: var(--radius-lg);
+  }
+
+  .aibot__header {
+    padding: var(--spacing-md);
+  }
+
+  .aibot__prebuilt,
+  .aibot__messages {
+    padding: var(--spacing-md);
+  }
+
+  .aibot__msg {
+    max-width: 100%;
+  }
+
+  .aibot__input-bar {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .aibot__send {
+    padding: 10px 16px;
+  }
+
+  .aibot__quick-row {
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+  }
+}

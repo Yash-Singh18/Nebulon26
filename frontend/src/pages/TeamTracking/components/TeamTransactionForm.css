@@ -151,3 +151,30 @@
   font-weight: 600;
   color: #22C55E;
 }
+
+@media (max-width: 768px) {
+  .ttxform__title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ttxform__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+
+  .ttxform__field {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .ttxform__submit {
+    width: 100%;
+    height: 44px;
+  }
+
+  .ttxform__csv {
+    align-items: flex-start;
+  }
+}
