@@ -1,15 +1,21 @@
 import redis
-from config import REDIS_HOST, REDIS_PORT, MEMORY_TTL, MAX_MEMORY_QUERIES
+from config import REDIS_URL, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, MEMORY_TTL, MAX_MEMORY_QUERIES
 
 _redis = None
 
 
 async def init_redis():
     global _redis
-    print(f"Connecting to Redis at {REDIS_HOST}:{REDIS_PORT}")
-    _redis = redis.Redis(
-        host=REDIS_HOST, port=REDIS_PORT, decode_responses=True
-    )
+    if REDIS_URL:
+        print(f"Connecting to Redis via URL")
+        _redis = redis.Redis.from_url(REDIS_URL, decode_responses=True)
+    else:
+        print(f"Connecting to Redis at {REDIS_HOST}:{REDIS_PORT}")
+        _redis = redis.Redis(
+            host=REDIS_HOST, port=REDIS_PORT,
+            password=REDIS_PASSWORD or None,
+            decode_responses=True,
+        )
     _redis.ping()
     print("Redis connected")
 

@@ -14,8 +14,10 @@ QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
 QDRANT_COLLECTION = "smb_knowledge"
 
 # Redis
+REDIS_URL = os.getenv("REDIS_URL", "")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
 
 # Models
 MAIN_MODEL = "llama-3.3-70b-versatile"
